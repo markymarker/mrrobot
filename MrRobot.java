@@ -14,6 +14,10 @@ class MrRobot {
     javax.swing.SwingUtilities.invokeLater(haus);
   }
 
+  public static void terminationProtocol(){
+    System.exit(0);
+  }
+
 
 // // NON-STATIC // //
 

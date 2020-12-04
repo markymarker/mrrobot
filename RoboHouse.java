@@ -76,6 +76,7 @@ class RoboHouse implements Runnable {
       switch(cmdstr){
       case ACTION_CLOSE:
         window.dispose();
+        MrRobot.terminationProtocol();
       break;
       case ACTION_BIG_J:
         System.out.println("Big J (or so)");
