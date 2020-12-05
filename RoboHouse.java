@@ -96,8 +96,10 @@ class RoboHouse implements Runnable {
 
 
   public Thread doCoolStuff(){
-    reality = new Thread(this);
-    reality.start();
+    if(reality == null){
+      reality = new Thread(this);
+      reality.start();
+    }
     return reality;
   }
 
