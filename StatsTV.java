@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+
 class StatsTV extends JPanel implements ActionListener {
 
   private JLabel countdown;
@@ -32,6 +33,13 @@ class StatsTV extends JPanel implements ActionListener {
     add(totalKeys);
     add(totalTime);
     add(goButton);
+  }
+
+
+  public void setStats(int next, long ktotal, long ttotal){
+    countdown.setText("Next in: " + next);
+    totalKeys.setText("Total bonks: " + ktotal);
+    totalTime.setText("Operational for: " + ttotal);
   }
 
 

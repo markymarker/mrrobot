@@ -3,6 +3,9 @@
 
 import java.awt.Robot;
 
+import java.awt.event.KeyEvent;
+
+
 class MrRobot {
 
 // // STATIC // //
@@ -45,6 +48,15 @@ class MrRobot {
       robot = null;
       System.err.println("Unable to init Robot");
     }
+  }
+
+
+  public void kickInTheRoboPants(){
+    robot.keyPress(KeyEvent.VK_NUM_LOCK);
+    robot.keyRelease(KeyEvent.VK_NUM_LOCK);
+
+    robot.keyPress(KeyEvent.VK_CONTROL);
+    robot.keyRelease(KeyEvent.VK_CONTROL);
   }
 
 }

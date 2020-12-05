@@ -27,6 +27,9 @@ class RoboHouse implements Runnable {
   private StatsTV stats;
 
   private MrRobot tenant;
+  private int interval = 5;
+  private long pressCount = 0;
+  private long timeElapsed = 0;
 
 
   public RoboHouse(MrRobot tenant){
@@ -63,6 +66,41 @@ class RoboHouse implements Runnable {
 
   public void doCoolStuff() throws InterruptedException {
     System.out.println("Starting up the smart home...");
+
+    int ticker = 0;
+    int dangerousMalfunctions = 0;
+    StringBuilder pictures = new StringBuilder();
+
+    try {
+      while(true){
+        // Pause for a second
+        try { Thread.sleep(1000); }
+        catch(Exception e) {
+          ++dangerousMalfunctions;
+          pictures.append(e.getMessage() + "\n");
+          if(dangerousMalfunctions > 8) break;
+        }
+
+        ++ticker;
+        ++timeElapsed;
+        int remain = interval - ticker;
+
+        if(remain == 0){
+          ticker = 0;
+          tenant.kickInTheRoboPants();
+          ++pressCount;
+        }
+
+        stats.setStats(remain, pressCount, timeElapsed);
+      }
+    } catch(Exception e) {
+      System.err.println("Smart home not so smart now: " + e.getMessage());
+    }
+
+    if(dangerousMalfunctions > 0){
+      System.err.println("Safety threshold exceeded");
+      System.err.println(pictures.toString());
+    }
   }
 
 
@@ -75,6 +113,7 @@ class RoboHouse implements Runnable {
     window.getRootPane().setBorder(new EmptyBorder(10, 10, 10, 10));
 
     stats = new StatsTV();
+    stats.setStats(interval, pressCount, timeElapsed);
     window.add(stats);
 
     setupActions();
