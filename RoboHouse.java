@@ -34,32 +34,6 @@ class RoboHouse implements Runnable {
   }
 
 
-  public void run(){
-    window = new JFrame("Mr. Robot");
-    window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    window.setMinimumSize(new Dimension(300, 10));
-    window.getRootPane().setBorder(new EmptyBorder(10, 10, 10, 10));
-
-    stats = new StatsTV();
-    window.add(stats);
-
-    setupActions();
-
-    window.pack();
-
-    try {
-      Point c = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
-      c.x = c.x / 3;
-      c.y = c.y * 2 / 3;
-      window.setLocation(c);
-    } catch(Exception e) {
-      window.setLocationByPlatform(true);
-    }
-
-    window.setVisible(true);
-  }
-
-
   private void setupActions(){
     InputMap inputs = window.getRootPane().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
     inputs.put(KeyStroke.getKeyStroke("ESCAPE"), ACTION_CLOSE);
@@ -84,6 +58,39 @@ class RoboHouse implements Runnable {
       default:
         System.out.println("No action defined for [" + cmdstr + "]");
       }
+  }
+
+
+  public void doCoolStuff() throws InterruptedException {
+    System.out.println("Starting up the smart home...");
+  }
+
+
+// // RUNNABLE METHODS // //
+
+  public void run(){
+    window = new JFrame("Mr. Robot");
+    window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    window.setMinimumSize(new Dimension(300, 10));
+    window.getRootPane().setBorder(new EmptyBorder(10, 10, 10, 10));
+
+    stats = new StatsTV();
+    window.add(stats);
+
+    setupActions();
+
+    window.pack();
+
+    try {
+      Point c = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
+      c.x = c.x / 3;
+      c.y = c.y * 2 / 3;
+      window.setLocation(c);
+    } catch(Exception e) {
+      window.setLocationByPlatform(true);
+    }
+
+    window.setVisible(true);
   }
 
 
