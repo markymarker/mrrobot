@@ -30,6 +30,7 @@ class RoboHouse implements Runnable {
   private int interval = 5;
   private long pressCount = 0;
   private long timeElapsed = 0;
+  private boolean keepGoing;
 
 
   public RoboHouse(MrRobot tenant){
@@ -52,7 +53,7 @@ class RoboHouse implements Runnable {
   public void handleAction(ActionEvent e, String cmdstr){
       switch(cmdstr){
       case ACTION_CLOSE:
-        window.dispose();
+        keepGoing = false;
         MrRobot.terminationProtocol();
       break;
       case ACTION_BIG_J:
@@ -71,8 +72,10 @@ class RoboHouse implements Runnable {
     int dangerousMalfunctions = 0;
     StringBuilder pictures = new StringBuilder();
 
+    keepGoing = true;
+
     try {
-      while(true){
+      while(keepGoing){
         // Pause for a second
         try { Thread.sleep(1000); }
         catch(Exception e) {

@@ -27,6 +27,8 @@ class MrRobot {
       System.err.println("Some other error happened: " + e.getMessage());
       terminationProtocol(1);
     }
+
+    terminationProtocol();
   }
 
   public static void terminationProtocol(int code){
