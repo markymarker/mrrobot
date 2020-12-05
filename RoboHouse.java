@@ -26,6 +26,7 @@ class RoboHouse implements Runnable {
   private JFrame window;
   private StatsTV stats;
 
+  private Thread reality;
   private MrRobot tenant;
   private int interval = 5;
   private long pressCount = 0;
@@ -54,7 +55,9 @@ class RoboHouse implements Runnable {
       switch(cmdstr){
       case ACTION_CLOSE:
         keepGoing = false;
-        MrRobot.terminationProtocol();
+        //reality.interrupt();
+        window.dispose();
+        //MrRobot.terminationProtocol();
       break;
       case ACTION_BIG_J:
         System.out.println("Big J (or so)");
@@ -65,7 +68,43 @@ class RoboHouse implements Runnable {
   }
 
 
-  public void doCoolStuff() throws InterruptedException {
+  public void arrangeFurniture(){
+    window = new JFrame("Mr. Robot");
+    window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    window.setMinimumSize(new Dimension(300, 10));
+    window.getRootPane().setBorder(new EmptyBorder(10, 10, 10, 10));
+
+    stats = new StatsTV();
+    stats.setStats(interval, pressCount, timeElapsed);
+    window.add(stats);
+
+    setupActions();
+
+    window.pack();
+
+    try {
+      Point c = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
+      c.x = c.x / 3;
+      c.y = c.y * 2 / 3;
+      window.setLocation(c);
+    } catch(Exception e) {
+      window.setLocationByPlatform(true);
+    }
+
+    window.setVisible(true);
+  }
+
+
+  public Thread doCoolStuff(){
+    reality = new Thread(this);
+    reality.start();
+    return reality;
+  }
+
+
+// // RUNNABLE METHODS // //
+
+  public void run(){
     System.out.println("Starting up the smart home...");
 
     int ticker = 0;
@@ -104,35 +143,6 @@ class RoboHouse implements Runnable {
       System.err.println("Safety threshold exceeded");
       System.err.println(pictures.toString());
     }
-  }
-
-
-// // RUNNABLE METHODS // //
-
-  public void run(){
-    window = new JFrame("Mr. Robot");
-    window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    window.setMinimumSize(new Dimension(300, 10));
-    window.getRootPane().setBorder(new EmptyBorder(10, 10, 10, 10));
-
-    stats = new StatsTV();
-    stats.setStats(interval, pressCount, timeElapsed);
-    window.add(stats);
-
-    setupActions();
-
-    window.pack();
-
-    try {
-      Point c = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
-      c.x = c.x / 3;
-      c.y = c.y * 2 / 3;
-      window.setLocation(c);
-    } catch(Exception e) {
-      window.setLocationByPlatform(true);
-    }
-
-    window.setVisible(true);
   }
 
 

@@ -13,18 +13,26 @@ class MrRobot {
   public static void main(String[] args){
     MrRobot rowboat = new MrRobot();
     RoboHouse haus = new RoboHouse(rowboat);
+    Thread hausland;
 
     try {
-      javax.swing.SwingUtilities.invokeAndWait(haus);
-      haus.doCoolStuff();
+
+      javax.swing.SwingUtilities.invokeAndWait(new Runnable(){
+        public void run(){ haus.arrangeFurniture(); }
+      });
+
+      hausland = haus.doCoolStuff();
+      hausland.join();
+
     } catch(InterruptedException e) {
-      System.err.println("Interrupted while initing: " + e.getMessage());
+      System.err.println("Rudely interrupted: " + e.getMessage());
       terminationProtocol(1);
     } catch(java.lang.reflect.InvocationTargetException e) {
       System.err.println("Init error: " + e.getMessage());
       terminationProtocol(1);
     } catch(Exception e) {
       System.err.println("Some other error happened: " + e.getMessage());
+      e.printStackTrace();
       terminationProtocol(1);
     }
 
