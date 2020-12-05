@@ -31,7 +31,7 @@ class RoboHouse implements Runnable {
   private int interval = 5;
   private long pressCount = 0;
   private long timeElapsed = 0;
-  private boolean keepGoing;
+  private volatile boolean keepGoing;
 
 
   public RoboHouse(MrRobot tenant){
