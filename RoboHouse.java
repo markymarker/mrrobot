@@ -28,7 +28,7 @@ class RoboHouse implements Runnable {
 
   private Thread reality;
   private MrRobot tenant;
-  private int interval = 5;
+  private int interval = 20;
   private long pressCount = 0;
   private long timeElapsed = 0;
   private volatile boolean keepGoing;
@@ -111,6 +111,7 @@ class RoboHouse implements Runnable {
 
     int ticker = 0;
     int dangerousMalfunctions = 0;
+    long lasttickstart = System.currentTimeMillis();
     StringBuilder pictures = new StringBuilder();
 
     keepGoing = true;
@@ -118,12 +119,17 @@ class RoboHouse implements Runnable {
     try {
       while(keepGoing){
         // Pause for a second
-        try { Thread.sleep(1000); }
-        catch(Exception e) {
-          ++dangerousMalfunctions;
-          pictures.append(e.getMessage() + "\n");
-          if(dangerousMalfunctions > 8) break;
+        long diff = (lasttickstart + 1000) - System.currentTimeMillis();
+        if(diff > 0){
+          try { Thread.sleep(diff); }
+          catch(Exception e) {
+            ++dangerousMalfunctions;
+            pictures.append(e.getMessage() + "\n");
+            if(dangerousMalfunctions > 8) break;
+          }
         }
+
+        lasttickstart = System.currentTimeMillis();
 
         ++ticker;
         ++timeElapsed;
