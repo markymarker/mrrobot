@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
+import javax.swing.BoxLayout;
 import javax.swing.InputMap;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -24,7 +25,9 @@ class RoboHouse implements Runnable {
 
 
   private JFrame window;
+  private JPanel display;
   private StatsTV stats;
+  private TVControls controls;
 
   private Thread reality;
   private MrRobot tenant;
@@ -69,14 +72,25 @@ class RoboHouse implements Runnable {
 
 
   public void arrangeFurniture(){
+    int minimumWidescreen = 300;
+
     window = new JFrame("Mr. Robot");
     window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    window.setMinimumSize(new Dimension(300, 10));
-    window.getRootPane().setBorder(new EmptyBorder(10, 10, 10, 10));
+    window.setMinimumSize(new Dimension(minimumWidescreen, 10));
+    window.getRootPane().setBorder(new EmptyBorder(0, 5, 5, 5));
+    window.setBackground(new java.awt.Color(66, 66, 66));
+
+    display = new JPanel();
+    display.setLayout(new BoxLayout(display, BoxLayout.Y_AXIS));
+    display.setBackground(new java.awt.Color(0, 0, 0));
+    window.add(display);
 
     stats = new StatsTV();
     stats.setStats(interval, pressCount, timeElapsed);
-    window.add(stats);
+    display.add(stats);
+
+    controls = new TVControls();
+    display.add(controls);
 
     setupActions();
 

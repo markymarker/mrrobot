@@ -1,38 +1,32 @@
 // Mark Fletcher
 // 2020-12-03
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import javax.swing.border.EmptyBorder;
 
-class StatsTV extends JPanel implements ActionListener {
+
+class StatsTV extends JPanel {
 
   private JLabel countdown;
   private JLabel totalKeys;
   private JLabel totalTime;
-  private JButton goButton;
 
 
   public StatsTV(){
-    BoxLayout blay = new BoxLayout(this, BoxLayout.Y_AXIS);
-    setLayout(blay);
+    super();
+    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    setBorder(new EmptyBorder(5, 5, 5, 5));
 
     countdown = new JLabel("countdown");
     totalKeys = new JLabel("key total");
     totalTime = new JLabel("time total");
-    goButton = new JButton("Go");
-
-    goButton.addActionListener(this);
 
     add(countdown);
     add(totalKeys);
     add(totalTime);
-    add(goButton);
   }
 
 
@@ -40,16 +34,6 @@ class StatsTV extends JPanel implements ActionListener {
     countdown.setText("Next in: " + next);
     totalKeys.setText("Total bonks: " + ktotal);
     totalTime.setText("Operational for: " + ttotal);
-  }
-
-
-// // ACTION_LISTENER METHODS // //
-
-  public void actionPerformed(ActionEvent e){
-    Object source = e.getSource();
-    if(source.equals(goButton)){
-      System.out.println("Go button clicked, neat");
-    }
   }
 
 }
