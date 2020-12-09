@@ -31,10 +31,11 @@ class RoboHouse implements Runnable {
 
   private Thread reality;
   private MrRobot tenant;
-  private int interval = 20;
   private long pressCount = 0;
   private long timeElapsed = 0;
+  private volatile int interval = 20;
   private volatile boolean keepGoing;
+  private volatile boolean paused;
 
 
   public RoboHouse(MrRobot tenant){
@@ -89,7 +90,7 @@ class RoboHouse implements Runnable {
     stats.setStats(interval, pressCount, timeElapsed);
     display.add(stats);
 
-    controls = new TVControls();
+    controls = new TVControls(this);
     display.add(controls);
 
     setupActions();
@@ -118,12 +119,34 @@ class RoboHouse implements Runnable {
   }
 
 
+  public int getInterval(){
+    return interval;
+  }
+
+
+  public void setInterval(int intval){
+    interval = intval;
+  }
+
+
+  public void setPaused(boolean p){
+    this.paused = p;
+    stats.setPauseState(p);
+  }
+
+
+  public void togglePaused(){
+    setPaused(!paused);
+  }
+
+
 // // RUNNABLE METHODS // //
 
   public void run(){
     System.out.println("Starting up the smart home...");
 
     int ticker = 0;
+    int intervalInUse = interval;
     int dangerousMalfunctions = 0;
     long lasttickstart = System.currentTimeMillis();
     StringBuilder pictures = new StringBuilder();
@@ -145,17 +168,24 @@ class RoboHouse implements Runnable {
 
         lasttickstart = System.currentTimeMillis();
 
-        ++ticker;
-        ++timeElapsed;
-        int remain = interval - ticker;
-
-        if(remain == 0){
+        if(intervalInUse != interval){
           ticker = 0;
+          intervalInUse = interval;
+        }
+
+        if(!paused) ++ticker;
+        ++timeElapsed;
+        int remain = intervalInUse - ticker;
+
+        if(!paused && remain <= 0){
+          ticker = 0;
+          remain = intervalInUse;
           tenant.kickInTheRoboPants();
           ++pressCount;
         }
 
         stats.setStats(remain, pressCount, timeElapsed);
+        //stats.revalidate();
       }
     } catch(Exception e) {
       System.err.println("Smart home not so smart now: " + e.getMessage());
