@@ -56,12 +56,19 @@ class MrRobot {
       robot = new Robot();
     } catch(Exception e) {
       robot = null;
-      System.err.println("Unable to init Robot");
+      System.err.println("RoboSystem Error: Unable to init internal Robot... What am I?");
     }
   }
 
 
+  public boolean functional(){
+    return robot != null;
+  }
+
+
   public void kickInTheRoboPants(){
+    if(!functional()) return;
+
     robot.keyPress(KeyEvent.VK_NUM_LOCK);
     robot.keyRelease(KeyEvent.VK_NUM_LOCK);
 

@@ -1,11 +1,14 @@
 // Mark Fletcher
 // 2020-12-03
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -22,6 +25,9 @@ class RoboHouse implements Runnable {
 
   private static final String ACTION_CLOSE = "Close Window";
   private static final String ACTION_BIG_J = "Big J";
+
+  private static final Color ACTIVE_BORDER = new Color(66, 66, 66);
+  private static final Color INACTIVE_BORDER = new Color(175, 175, 175);
 
 
   private JFrame window;
@@ -44,6 +50,8 @@ class RoboHouse implements Runnable {
 
 
   private void setupActions(){
+    window.addWindowListener(new Windower());
+
     InputMap inputs = window.getRootPane().getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
     inputs.put(KeyStroke.getKeyStroke("ESCAPE"), ACTION_CLOSE);
     inputs.put(KeyStroke.getKeyStroke("shift J"), ACTION_BIG_J);
@@ -130,6 +138,9 @@ class RoboHouse implements Runnable {
 
 
   public void setPaused(boolean p){
+    // Lock pause on if busted robot
+    if(!tenant.functional()) p = true;
+
     this.paused = p;
     stats.setPauseState(p);
   }
@@ -144,6 +155,11 @@ class RoboHouse implements Runnable {
 
   public void run(){
     System.out.println("Starting up the smart home...");
+
+    if(!tenant.functional()){
+      System.out.println("O dear, Mr. Robot doesn't appear to be home");
+      setPaused(true);
+    }
 
     int ticker = 0;
     int intervalInUse = interval;
@@ -198,7 +214,7 @@ class RoboHouse implements Runnable {
   }
 
 
-// // ACTION HANDLER CLASS // //
+// // ACTION HANDLER CLASSES // //
 
   private class Actioner extends AbstractAction {
     private String commandString;
@@ -209,6 +225,17 @@ class RoboHouse implements Runnable {
 
     public void actionPerformed(ActionEvent e){
       handleAction(e, commandString);
+    }
+  }
+
+
+  private class Windower extends WindowAdapter {
+    public void windowActivated(WindowEvent e){
+      window.setBackground(ACTIVE_BORDER);
+    }
+
+    public void windowDeactivated(WindowEvent e){
+      window.setBackground(INACTIVE_BORDER);
     }
   }
 
