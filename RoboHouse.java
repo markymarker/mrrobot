@@ -31,7 +31,6 @@ class RoboHouse implements Runnable {
 
 
   private JFrame window;
-  private JPanel display;
   private StatsTV stats;
   private TVControls controls;
 
@@ -86,20 +85,16 @@ class RoboHouse implements Runnable {
     window = new JFrame("Mr. Robot");
     window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     window.setMinimumSize(new Dimension(minimumWidescreen, 10));
-    window.getRootPane().setBorder(new EmptyBorder(0, 5, 5, 5));
     window.setBackground(new java.awt.Color(66, 66, 66));
-
-    display = new JPanel();
-    display.setLayout(new BoxLayout(display, BoxLayout.Y_AXIS));
-    display.setBackground(new java.awt.Color(0, 0, 0));
-    window.add(display);
+    window.getRootPane().setBorder(new EmptyBorder(0, 5, 5, 5));
+    window.getContentPane().setLayout(new BoxLayout(window.getContentPane(), BoxLayout.Y_AXIS));
 
     stats = new StatsTV();
     stats.setStats(interval, pressCount, timeElapsed);
-    display.add(stats);
+    window.add(stats);
 
     controls = new TVControls(this);
-    display.add(controls);
+    window.add(controls);
 
     setupActions();
 
