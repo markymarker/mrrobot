@@ -25,6 +25,7 @@ class RoboHouse implements Runnable {
 
   private static final String ACTION_CLOSE = "Close Window";
   private static final String ACTION_BIG_J = "Big J";
+  private static final String ACTION_SETTINGS = "Settings Window";
 
   private static final Color ACTIVE_BORDER = new Color(66, 66, 66);
   private static final Color INACTIVE_BORDER = new Color(175, 175, 175);
@@ -33,6 +34,7 @@ class RoboHouse implements Runnable {
   private JFrame window;
   private StatsTV stats;
   private TVControls controls;
+  private UniversalRemote settings;
 
   private Thread reality;
   private MrRobot tenant;
@@ -48,6 +50,12 @@ class RoboHouse implements Runnable {
   }
 
 
+  private void updateSettings(){
+    UniversalRemote.Values sets = settings.getSettings();
+    System.out.println(sets);
+  }
+
+
   private void setupActions(){
     window.addWindowListener(new Windower());
 
@@ -55,10 +63,12 @@ class RoboHouse implements Runnable {
     inputs.put(KeyStroke.getKeyStroke("ESCAPE"), ACTION_CLOSE);
     inputs.put(KeyStroke.getKeyStroke("shift J"), ACTION_BIG_J);
     inputs.put(KeyStroke.getKeyStroke("shift H"), ACTION_BIG_J);
+    inputs.put(KeyStroke.getKeyStroke("S"), ACTION_SETTINGS);
 
     ActionMap actions = window.getRootPane().getActionMap();
     actions.put(ACTION_CLOSE, new Actioner(ACTION_CLOSE));
     actions.put(ACTION_BIG_J, new Actioner(ACTION_BIG_J));
+    actions.put(ACTION_SETTINGS, new Actioner(ACTION_SETTINGS));
   }
 
 
@@ -73,6 +83,10 @@ class RoboHouse implements Runnable {
       case ACTION_BIG_J:
         System.out.println("Big J (or so)");
       break;
+      case ACTION_SETTINGS:
+        settings.giveth();
+        updateSettings();
+      break;
       default:
         System.out.println("No action defined for [" + cmdstr + "]");
       }
@@ -83,7 +97,7 @@ class RoboHouse implements Runnable {
     int minimumWidescreen = 300;
 
     window = new JFrame("Mr. Robot");
-    window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     window.setMinimumSize(new Dimension(minimumWidescreen, 10));
     window.setBackground(new java.awt.Color(66, 66, 66));
     window.getRootPane().setBorder(new EmptyBorder(0, 5, 5, 5));
@@ -95,6 +109,8 @@ class RoboHouse implements Runnable {
 
     controls = new TVControls(this);
     window.add(controls);
+
+    settings = new UniversalRemote(window);
 
     setupActions();
 
@@ -225,6 +241,11 @@ class RoboHouse implements Runnable {
 
 
   private class Windower extends WindowAdapter {
+    public void windowClosed(WindowEvent e){
+      keepGoing = false;
+      paused = true;
+    }
+
     public void windowActivated(WindowEvent e){
       window.setBackground(ACTIVE_BORDER);
     }
