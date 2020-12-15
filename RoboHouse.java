@@ -38,21 +38,25 @@ class RoboHouse implements Runnable {
 
   private Thread reality;
   private MrRobot tenant;
+  private Values svals;
   private long pressCount = 0;
   private long timeElapsed = 0;
   private volatile int interval = 20;
+  private volatile boolean updateVals;
   private volatile boolean keepGoing;
   private volatile boolean paused;
 
 
   public RoboHouse(MrRobot tenant){
     this.tenant = tenant;
+
+    this.svals = new Values();
   }
 
 
   private void updateSettings(){
-    UniversalRemote.Values sets = settings.getSettings();
-    System.out.println(sets);
+    //Values sets = settings.getSettings();
+    System.out.println(svals);
   }
 
 
@@ -85,7 +89,7 @@ class RoboHouse implements Runnable {
       break;
       case ACTION_SETTINGS:
         settings.giveth();
-        updateSettings();
+        updateSettings();  // Fires when dialog closed
       break;
       default:
         System.out.println("No action defined for [" + cmdstr + "]");
@@ -110,7 +114,7 @@ class RoboHouse implements Runnable {
     controls = new TVControls(this);
     window.add(controls);
 
-    settings = new UniversalRemote(window);
+    settings = new UniversalRemote(window, svals);
 
     setupActions();
 
