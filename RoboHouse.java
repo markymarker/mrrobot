@@ -21,11 +21,16 @@ import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 
 
+/**
+ * "The code is the comments".
+ * At least for now.
+ */
 class RoboHouse implements Runnable {
 
   private static final String ACTION_CLOSE = "Close Window";
   private static final String ACTION_BIG_J = "Big J";
   private static final String ACTION_SETTINGS = "Settings Window";
+  private static final String ACTION_SETTINGS_PRINT = "Print Settings";
 
   private static final Color ACTIVE_BORDER = new Color(66, 66, 66);
   private static final Color INACTIVE_BORDER = new Color(175, 175, 175);
@@ -42,7 +47,7 @@ class RoboHouse implements Runnable {
   private long pressCount = 0;
   private long timeElapsed = 0;
   private volatile int interval = 20;
-  private volatile boolean updateVals;
+  private volatile boolean reloadSettings;
   private volatile boolean keepGoing;
   private volatile boolean paused;
 
@@ -55,8 +60,7 @@ class RoboHouse implements Runnable {
 
 
   private void updateSettings(){
-    //Values sets = settings.getSettings();
-    System.out.println(svals);
+    reloadSettings = true;
   }
 
 
@@ -68,11 +72,13 @@ class RoboHouse implements Runnable {
     inputs.put(KeyStroke.getKeyStroke("shift J"), ACTION_BIG_J);
     inputs.put(KeyStroke.getKeyStroke("shift H"), ACTION_BIG_J);
     inputs.put(KeyStroke.getKeyStroke("S"), ACTION_SETTINGS);
+    inputs.put(KeyStroke.getKeyStroke("shift S"), ACTION_SETTINGS_PRINT);
 
     ActionMap actions = window.getRootPane().getActionMap();
     actions.put(ACTION_CLOSE, new Actioner(ACTION_CLOSE));
     actions.put(ACTION_BIG_J, new Actioner(ACTION_BIG_J));
     actions.put(ACTION_SETTINGS, new Actioner(ACTION_SETTINGS));
+    actions.put(ACTION_SETTINGS_PRINT, new Actioner(ACTION_SETTINGS_PRINT));
   }
 
 
@@ -90,6 +96,9 @@ class RoboHouse implements Runnable {
       case ACTION_SETTINGS:
         settings.giveth();
         updateSettings();  // Fires when dialog closed
+      break;
+      case ACTION_SETTINGS_PRINT:
+        System.out.println(svals);
       break;
       default:
         System.out.println("No action defined for [" + cmdstr + "]");

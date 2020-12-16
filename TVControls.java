@@ -13,6 +13,11 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 
+/**
+ * Controls for when main screen turn(ed) on.
+ * Goes with the main window to provide user-friendly (or at least user-curteous)
+ * controls and navigation.
+ */
 class TVControls extends JPanel implements ActionListener {
 
   private static final String LABEL_PAUSE = "Pause";
@@ -24,6 +29,10 @@ class TVControls extends JPanel implements ActionListener {
   private JButton goConfig;
 
 
+  /**
+   * Set up the control station.
+   * This is where the little gnomes put the buttons on and stuff.
+   */
   public TVControls(RoboHouse haus){
     super(new BorderLayout());
     setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -43,6 +52,11 @@ class TVControls extends JPanel implements ActionListener {
 
 // // ACTION_LISTENER METHODS // //
 
+  /**
+   * The brains of the controller.
+   * This is where our patented algorithm delivers the secret sauce to make the
+   * magic happen.
+   */
   public void actionPerformed(ActionEvent e){
     //Object source = e.getSource();
 
