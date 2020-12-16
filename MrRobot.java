@@ -84,7 +84,7 @@ class MrRobot {
   /**
    * Is this thing on?...
    *
-   * @return TRUE if this broken piece of crap is busted; if FALSE, hopefully we
+   * @return FALSE if this broken piece of crap is busted; if TRUE, hopefully we
    *   forgot to install the hearing upgrade...
    */
   public boolean functional(){
