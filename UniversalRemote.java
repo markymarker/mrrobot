@@ -55,7 +55,7 @@ class UniversalRemote extends JDialog {
 
   // Settings input elements
   JTextField finterval;
-  JTextField fkeystroke;  // TODO: Contain functionality in custom class
+  WhichKeyField fkeystroke;
 
 
   /**
@@ -83,9 +83,8 @@ class UniversalRemote extends JDialog {
     add(tp);
 
     lkeystroke = new JLabel("Keystroke");
-    fkeystroke = new JTextField(25);
-    fkeystroke.setEditable(false);
-    fkeystroke.setBackground(Color.WHITE);
+    fkeystroke = new WhichKeyField(25);
+    fkeystroke.setBorders(BORDER_ACTIVE, BORDER_NORMAL);
     tp = new JPanel();
     tp.add(lkeystroke);
     tp.add(fkeystroke);
@@ -117,8 +116,8 @@ class UniversalRemote extends JDialog {
 
 
   /**
-   * Define and set the action listener for inputs.
-   * The listeners to use are defined in-place in this method and are not
+   * Define and set the action (and etc.) listener(s) for input(s).
+   * The listener(s) to use are defined in-place in this method and are not
    * accessible elsewhere in this class.
    */
   private void registerListeners(){
@@ -142,49 +141,6 @@ class UniversalRemote extends JDialog {
     bsave.addActionListener(al);
     breset.addActionListener(al);
     bcancel.addActionListener(al);
-
-
-    KeyAdapter kl = new KeyAdapter(){
-      private KeyEvent accumulator = null;
-
-      public void keyPressed(KeyEvent e){
-        e.consume();
-        accumulator = e;
-      }
-
-      public void keyReleased(KeyEvent e){
-        e.consume();
-        if(accumulator != null){
-          KeyStroke s = KeyStroke.getKeyStrokeForEvent(accumulator);
-          fkeystroke.setText(s.toString());
-          accumulator = null;
-        }
-      }
-    };
-
-    fkeystroke.addKeyListener(kl);
-
-
-    FocusListener fl = new FocusListener(){
-      private final Color COLOR_INACTIVE = Color.WHITE;
-      private final Color COLOR_ACTIVE = new Color(240, 255, 240);
-
-      public void focusGained(FocusEvent e){
-        if(!(e.getComponent() instanceof JTextField)) return;
-        JTextField c = (JTextField)e.getComponent();
-        c.setBackground(COLOR_ACTIVE);
-        c.setBorder(BORDER_ACTIVE);
-      }
-
-      public void focusLost(FocusEvent e){
-        if(!(e.getComponent() instanceof JTextField)) return;
-        JTextField c = (JTextField)e.getComponent();
-        c.setBackground(COLOR_INACTIVE);
-        c.setBorder(BORDER_NORMAL);
-      }
-    };
-
-    fkeystroke.addFocusListener(fl);
   }
 
 
@@ -212,7 +168,7 @@ class UniversalRemote extends JDialog {
    */
   public void loadSettings(){
     finterval.setText(String.valueOf(settings.interval));
-    fkeystroke.setText(String.valueOf(settings.key));
+    fkeystroke.setKeyStroke(settings.key);
 
     setNormalBorders();
   }
@@ -277,8 +233,8 @@ class UniversalRemote extends JDialog {
    * @return TRUE on successful parsing and saving, FALSE on failure
    */
   private boolean saveKeystroke(){
-    settings.key = KeyStroke.getKeyStroke(fkeystroke.getText());
-    return true;
+    settings.key = fkeystroke.getKeyStroke();
+    return true;  // There's no way this could fail!
   }
 
 }
