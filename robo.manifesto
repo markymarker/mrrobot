@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Created-By: Mark
+Main-Class: MrRobot
+Entry-Point: MrRobot
+Sealed: true
+
