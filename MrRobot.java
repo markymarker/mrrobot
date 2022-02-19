@@ -64,6 +64,7 @@ class MrRobot {
 // // NON-STATIC // //
 
   private Robot robot;
+  private Values vals;
 
 
   /**
@@ -72,6 +73,8 @@ class MrRobot {
    * all that task performing he's looking forward to doing.
    */
   public MrRobot(){
+    vals = new Values();
+
     try {
       robot = new Robot();
     } catch(Exception e) {
@@ -93,12 +96,38 @@ class MrRobot {
 
 
   /**
+   * Share the secret settings knowledge.
+   *
+   * @return The robo-settings object that is in robo-use
+   */
+  public Values getValues(){
+    return vals;
+  }
+
+
+  /**
    * Perform tasks.
    * No slacking on the RoboJob! I'm not paying you to leak oil! Etc.
    */
   public void kickInTheRoboPants(){
     if(!functional()) return;
 
+    if(vals.key == null){
+      defaultKick();
+      return;
+    }
+
+    // For now, just the key, no modifiers
+    int code = vals.key.getKeyCode();
+    robot.keyPress(code);
+    robot.keyRelease(code);
+  }
+
+
+  /**
+   * Default behavior for when called to action with no real orders.
+   */
+  private void defaultKick(){
     robot.keyPress(KeyEvent.VK_NUM_LOCK);
     robot.keyRelease(KeyEvent.VK_NUM_LOCK);
 

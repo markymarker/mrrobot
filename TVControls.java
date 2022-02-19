@@ -65,32 +65,7 @@ class TVControls extends JPanel implements ActionListener {
       abode.togglePaused();
     break;
     case LABEL_SET:
-      //System.out.println("Gonna open those settings, just you wait...");
-      // TODO: Create an actual settings window
-
-      try {
-        Object inp = JOptionPane.showInputDialog(
-            this,
-            "Enter interval", "Gimme Input",
-            JOptionPane.QUESTION_MESSAGE,
-            null, null,
-            abode.getInterval()
-        );
-
-        if(inp == null) break;
-
-        String sinp = inp.toString();
-        if(sinp.length() != 0)
-          abode.setInterval(Integer.parseInt(sinp));
-      } catch(NumberFormatException ex) {
-        JOptionPane.showMessageDialog(
-          this,
-          "That was not valid", "WTF",
-          JOptionPane.ERROR_MESSAGE
-        );
-      } catch(Exception ex){
-        System.err.println("Unable to show input pane");
-      }
+      abode.showSettings();
     break;
     default:
         System.out.println("No action defined for [" + e.getActionCommand() + "]");

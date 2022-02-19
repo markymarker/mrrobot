@@ -8,9 +8,9 @@ Originally created simply to robo-press a key every so often to keep a computer 
 
 Simply run the program and, barring any errors with the system, it will begin doing its job with default parameters.
 
-At the time of writing, the default behavior is to press and release the NUM_LOCK and CONTROL keys every 20 seconds. The NUM_LOCK keypress in included so the indicator light on the keyboard can be observed to toggle.
+At the time of writing, the default behavior is to press and release the CONTROL key every 20 seconds. If the setting for keypress is cleared (by pressing DELETE while configuring it), keypress behavior will default to pressing the CONTROL and NUM_LOCK keys (the NUM_LOCK keypress is included so the indicator light on the keyboard can be observed to toggle).
 
-The default settings are kind of annoying, since they were intended for testing while developing and have stayed with their original values (as it tends to go), so it is recommended to at least adjust the interval to something more appropriate by clicking the settings button. Currently, only the interval is adjustable; configuration for the keypress is something there are pieces in place for, but full implementation hasn't yet happened.
+The "Settings" button will open a window where the interval and key to press can be adjusted. Currently, any modifiers on the keypress are ignored (e.g. "CONTROL ALT S" will just result in an "S" keypress).
 
 --------
 ### Hotkeys and Such
@@ -21,7 +21,7 @@ All hotkeys are for the main window unless otherwise noted.
 The escape key can be pressed in the main window to exit the program. When some settings windows are open, escape can be pressed to close said settings window. On some settings windows, escape can be pressed to do nothing, but this is ultimately intended to be made consistent (i.e. close the active window/sub-window).
 
 - s  
-The "s" key can be pressed to open a preview of the custom settings window. The settings there can be edited and saved, but do not currently take effect.
+The "s" key can be pressed to open the custom settings window. This is the same action as clicking the "Settings" button on the interface.
 
 - S  
 The "S" (shift + s) key can be pressed to dump some info to an associated output stream (e.g. the terminal running MrRobot).

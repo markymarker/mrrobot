@@ -46,7 +46,6 @@ class RoboHouse implements Runnable {
   private Values svals;
   private long pressCount = 0;
   private long timeElapsed = 0;
-  private volatile int interval = 20;
   private volatile boolean reloadSettings;
   private volatile boolean keepGoing;
   private volatile boolean paused;
@@ -55,7 +54,7 @@ class RoboHouse implements Runnable {
   public RoboHouse(MrRobot tenant){
     this.tenant = tenant;
 
-    this.svals = new Values();
+    this.svals = tenant.getValues();
   }
 
 
@@ -94,8 +93,7 @@ class RoboHouse implements Runnable {
         System.out.println("Big J (or so)");
       break;
       case ACTION_SETTINGS:
-        settings.giveth();
-        updateSettings();  // Fires when dialog closed
+        showSettings();
       break;
       case ACTION_SETTINGS_PRINT:
         System.out.println(svals);
@@ -117,7 +115,7 @@ class RoboHouse implements Runnable {
     window.getContentPane().setLayout(new BoxLayout(window.getContentPane(), BoxLayout.Y_AXIS));
 
     stats = new StatsTV();
-    stats.setStats(interval, pressCount, timeElapsed);
+    stats.setStats(svals.interval, pressCount, timeElapsed);
     window.add(stats);
 
     controls = new TVControls(this);
@@ -151,13 +149,9 @@ class RoboHouse implements Runnable {
   }
 
 
-  public int getInterval(){
-    return interval;
-  }
-
-
-  public void setInterval(int intval){
-    interval = intval;
+  public void showSettings(){
+    settings.giveth();
+    updateSettings();  // Fires when dialog closed
   }
 
 
@@ -186,7 +180,7 @@ class RoboHouse implements Runnable {
     }
 
     int ticker = 0;
-    int intervalInUse = interval;
+    int intervalInUse = svals.interval;
     int dangerousMalfunctions = 0;
     long lasttickstart = System.currentTimeMillis();
     StringBuilder pictures = new StringBuilder();
@@ -208,9 +202,9 @@ class RoboHouse implements Runnable {
 
         lasttickstart = System.currentTimeMillis();
 
-        if(intervalInUse != interval){
+        if(intervalInUse != svals.interval){
           ticker = 0;
-          intervalInUse = interval;
+          intervalInUse = svals.interval;
         }
 
         if(!paused) ++ticker;
